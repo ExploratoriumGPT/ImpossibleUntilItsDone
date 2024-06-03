@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Impossible Until it is Done</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Fira Sans', sans-serif;
+            font-size: 21px;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+
+        }
+
+        div[class^='tl'],
+        /* this selects everyqthing that starts with tl */
+        div[class*=' tl'] {
+            font-family: 'Fira Sans', sans-serif;
+        }
+
+        .tl-attribution {
+            /* this is smean, but I think ok for prototyping */
+            display: none;
+        }
+
+        h1 {
+            margin: 5px;
+            margin-left: 10px;
+        }
+
+        p {
+            margin: 5px;
+            margin-left: 30px;
+
+        }
+
+        #timeline-embed {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .timeline-button {
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            margin: 10px;
+            font-weight: 500;
+            cursor: pointer;
+            height: 200px;
+            width: 444px;
+            font-size: 40px;
+            font-family: 'Fira Sans', sans-serif;
+
+        }
+
+        .reset-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-weight: 500;
+            cursor: pointer;
+            height: 100px;
+            width: 224px;
+            font-size: 30px;
+            z-index: 1;
+            font-family: 'Fira Sans', sans-serif;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="titleBlock" style="width: 100%; height: 20vh; float: left; overflow: hidden;">
+        <h1> Impossible Until it is Done</h1>
+        <p> What is something that feels impossible now?</p>
+        <p> Looking back, how long do impossible things usually take?</p>
+        <p> Ask around, what was impossible when you were younger that now we have everywhere?</p>
+    </div>
+
+    <link title="timeline-styles" rel="stylesheet"
+        href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+
+    <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+
+    <div id='timeline-embed' style="width: 100%; height: 80vh"></div>
+
+    <script type="text/javascript">
+
+        function createButton(label, onClick) {
+            var button = document.createElement('button');
+            button.textContent = label;
+            button.className = 'timeline-button';
+            button.addEventListener('click', onClick);
+            return button;
+        }
+
+        function createTimeline(url) {
+            return new TL.Timeline('timeline-embed', url, {
+                timenav_position: 'top',
+                font: null
+            });
+        }
+
+        var timelines = {
+            'DDT: Poison or miracle? (with images)': 'https://docs.google.com/spreadsheets/d/1bHJ8tC4h9JADXTQPJclCFI-mfbL5I7VnnxQm5YMywic/pubhtml',
+            'The ozone Hole and wonder chemicals': 'https://docs.google.com/spreadsheets/d/1tiJP1F64eqDKGggWGbbcPyM1wfYbTAnEK7yPtLu0Nz8/edit#gid=0',
+            'Leaded Gasoline, from innovation to innundation': 'https://docs.google.com/spreadsheets/d/1T3XqBou8l2Cu5L1Enb0byawE41ok2nF90M2hIFSLAEY/edit#gid=0'
+        };
+        var timelineEmbed = document.getElementById('timeline-embed');
+
+        // Create the reset button outside of the event listener for the timeline buttons
+        var resetButton = document.createElement('button');
+        resetButton.textContent = 'Reset';
+        resetButton.className = 'reset-button';
+        resetButton.addEventListener('click', function () {
+            timelineEmbed.innerHTML = '';
+            resetButton.remove(); // Remove the reset button from the DOM
+
+            // Recreate the timeline buttons
+            Object.keys(timelines).forEach(function (label) {
+                timelineEmbed.appendChild(createButton(label, function () {
+                    timelineEmbed.innerHTML = '';
+                    createTimeline(timelines[label]);
+                    titleBlock.appendChild(resetButton); // Add the reset button to the DOM
+                }));
+            });
+        });
+
+        Object.keys(timelines).forEach(function (label) {
+            var button = createButton(label, function () {
+                timelineEmbed.innerHTML = '';
+                createTimeline(timelines[label]);
+                titleBlock.appendChild(resetButton); // Add the reset button to the DOM
+            });
+
+            timelineEmbed.appendChild(button);
+        });
+
+    </script>
+
+</html>
